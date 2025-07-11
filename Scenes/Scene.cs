@@ -44,6 +44,11 @@ public abstract class Scene : IDisposable
         LoadContent();
     }
 
+    public virtual void PhysicsUpdate()
+    {
+        
+    }
+
     /// <summary>
     /// Override to provide logic to load content for the scene.
     /// </summary>

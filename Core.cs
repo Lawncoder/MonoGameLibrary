@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using Arch.Buffer;
+using Arch.Core;
+using Arch.System;
+using Mario.Components;
+using Mario.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameLibrary.Audio;
+using MonoGameLibrary.ECS;
 using MonoGameLibrary.Input;
 using MonoGameLibrary.Scenes;
+using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace MonoGameLibrary;
 
@@ -19,10 +27,19 @@ public class Core : Game
 
     // The next scene to switch to, if there is one.
     private static Scene s_nextScene;
-    
+
+
+    public static Arch.Core.World EntityWorld;
+
+    public static Transform Camera { get; protected set; }
+    public static CommandBuffer CommandBuffer { get; private set; }
     public static GraphicsDeviceManager Graphics { get; private set; }
     
     public static new GraphicsDevice GraphicsDevice { get; private set; }
+
+    public static List<SystemBase> Systems;
+    
+    public static World PhysicsWorld { get; private set; }
     
     public static SpriteBatch SpriteBatch { get; private set; }
     
@@ -54,6 +71,10 @@ public class Core : Game
         Content.RootDirectory = "Content";
 
         IsMouseVisible = true;
+        CommandBuffer = new CommandBuffer();
+        EntityWorld = Arch.Core.World.Create();
+        PhysicsWorld = new World();
+        Systems = new List<SystemBase>();
     }
 
    
@@ -67,16 +88,33 @@ public class Core : Game
         Input = new InputManager();
         Audio = new AudioController();
         
+        
+        foreach (var system in Systems)
+        {
+            system.Initialize();
+            
+        }
+        
     }
 
+    private float _timeSinceLastPhysicsUpdateEnded = 0f;
     protected override void Update(GameTime gameTime)
     {
-        Input.Update(gameTime);
+        
+        foreach (var system in Systems)
+        {
+            system.BeforeUpdate(gameTime.ElapsedGameTime.Milliseconds/1000f);
+        }
+       
         if (ExitOnEscape && Input.Keyboard.WasKeyJustPressedThisFrame(Keys.Escape))
         {
             Exit();
         }
         Audio.Update();
+        foreach (var system in Systems)
+        {
+            system.Update(gameTime.ElapsedGameTime.Milliseconds/1000f);
+        }
         // if there is a next scene waiting to be switch to, then transition
         // to that scene.
         if (s_nextScene != null)
@@ -90,7 +128,19 @@ public class Core : Game
             s_activeScene.Update(gameTime);
         }
 
+        _timeSinceLastPhysicsUpdateEnded += gameTime.ElapsedGameTime.Milliseconds;
+        if (_timeSinceLastPhysicsUpdateEnded >= 20)
+        {
+            PhysicsUpdate();
+        }
+        
         base.Update(gameTime);
+        foreach (var system in Systems)
+        {
+            system.AfterUpdate(gameTime.ElapsedGameTime.Milliseconds/1000f);
+            
+        }
+        CommandBuffer.Playback(EntityWorld);
     }
 
     protected override void UnloadContent()
@@ -109,6 +159,28 @@ public class Core : Game
         base.Draw(gameTime);
     }
 
+    public virtual void PhysicsUpdate()
+    {
+        Input.Update();
+        
+        PhysicsWorld.Step(0.02f);
+        var query = new QueryDescription().WithAll<Transform, PhysicsComponent>();
+        EntityWorld.Query(in query, (Entity entity, ref Transform transform, ref PhysicsComponent physics) =>
+        {
+            transform.Position = physics.Body.Position;
+            transform.Rotation = physics.Body.Rotation;
+        });
+        
+        foreach (var system in Systems)
+        {
+            system.PhysicsUpdate();
+
+        }
+
+        _timeSinceLastPhysicsUpdateEnded = 0;
+
+    }
+
     public static void ChangeScene(Scene next)
     {
         // Only set the next scene value if it is not the same
@@ -121,6 +193,10 @@ public class Core : Game
 
     private static void TransitionScene()
     {
+        EntityWorld.Dispose();
+        EntityWorld = Arch.Core.World.Create();
+        PhysicsWorld.Clear();
+        
         // If there is an active scene, dispose of it.
         if (s_activeScene != null)
         {

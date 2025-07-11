@@ -14,7 +14,7 @@ public class InputManager
         
     }
 
-    public void Update(GameTime gameTime)
+    public void Update()
     {
         Keyboard.Update();
         Mouse.Update();

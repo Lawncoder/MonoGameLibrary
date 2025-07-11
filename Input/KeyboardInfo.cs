@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using System;
+using Microsoft.Xna.Framework.Input;
 
 namespace MonoGameLibrary.Input;
 
@@ -6,6 +7,7 @@ public class KeyboardInfo
 {
     public KeyboardState KeyboardState;
     public KeyboardState LastKeyboardState;
+  
 
     public KeyboardInfo()
     {
@@ -15,6 +17,7 @@ public class KeyboardInfo
 
     public void Update()
     {
+       
         LastKeyboardState = KeyboardState;
         KeyboardState = Keyboard.GetState();
     }
@@ -25,6 +28,7 @@ public class KeyboardInfo
         
     }
 
+    
     public bool IsKeyUp(Keys key)
     {
         return KeyboardState.IsKeyUp(key);
