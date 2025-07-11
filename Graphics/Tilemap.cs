@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Xml;
 using System.Xml.Linq;
@@ -84,6 +85,10 @@ public class Tilemap
         {
             int tileSetIndex = _tiles[i];
             TextureRegion tile = _tileset.GetTile(tileSetIndex);
+            if (tile == null)
+            {
+                continue;
+            }
             int x = i % Columns;
             int y = i / Columns;
             Vector2 position = new Vector2(x * TileWidth, y * TileHeight);
@@ -189,7 +194,7 @@ public class Tilemap
             }
         }
     }
-    public static Tilemap FromFile(ContentManager content, string filename, bool json)
+    public static Tilemap FromFile(ContentManager content, string filename, string layerName)
     {
         string filePath = Path.Combine(content.RootDirectory, filename);
         int mapWidth = 0;
@@ -208,16 +213,24 @@ public class Tilemap
                     document.RootElement.GetProperty("mapHeight").GetInt32();
                 
                 tileSize = document.RootElement.GetProperty("tileSize").GetInt32();
-                string sourceTexture = document.RootElement.GetProperty("sourceTexture").GetString();
+                string sourceTexture = "spritesheet";
                 tileset = content.Load<Texture2D>(sourceTexture);
                 data = new int[mapWidth][];
+                
                 for (int i = 0; i < mapWidth; i++)
                 {
                     
                     data[i] = new int[mapHeight];
+                    for (int j= 0; j < mapHeight; j++)
+                    {
+                        data[i][j] = -1;
+                    }
                 }
                 
-                foreach (JsonElement tile in document.RootElement.GetProperty("layers")[1].GetProperty("tiles")
+                foreach (JsonElement tile in document.RootElement.GetProperty("layers").EnumerateArray().Where(element =>
+                             {
+                                 return element.GetProperty("name").GetString().Equals(layerName);
+                             }).ToList()[0].GetProperty("tiles")
                              .EnumerateArray())
                 {
                     

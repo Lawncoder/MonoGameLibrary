@@ -31,7 +31,7 @@ public class Tileset
     /// </summary>
     /// <param name="index">The index of the texture region in this tile set.</param>
     /// <returns>The texture region for the tile form this tileset at the given index.</returns>
-    public TextureRegion GetTile(int index) => _tiles[index];
+    public TextureRegion GetTile(int index) => index != -1 ? _tiles[index] : null;
 
     /// <summary>
     /// Gets the texture region for the tile from this tileset at the given location.
