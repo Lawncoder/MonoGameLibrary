@@ -8,5 +8,5 @@ public abstract class SystemBase : BaseSystem<World, float>
 {
     public SystemBase(World world) : base(world) {}
 
-    public abstract void PhysicsUpdate();
+    public virtual void PhysicsUpdate() {}
 }
