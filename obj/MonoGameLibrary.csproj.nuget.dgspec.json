@@ -1,25 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\indep\\RiderProjects\\MonoGameLibrary\\MonoGameLibrary.csproj": {}
+    "/Users/fire/RiderProjects/MonoGameLibrary/MonoGameLibrary.csproj": {}
   },
   "projects": {
-    "C:\\Users\\indep\\RiderProjects\\MonoGameLibrary\\MonoGameLibrary.csproj": {
+    "/Users/fire/RiderProjects/MonoGameLibrary/MonoGameLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\indep\\RiderProjects\\MonoGameLibrary\\MonoGameLibrary.csproj",
+        "projectUniqueName": "/Users/fire/RiderProjects/MonoGameLibrary/MonoGameLibrary.csproj",
         "projectName": "MonoGameLibrary",
-        "projectPath": "C:\\Users\\indep\\RiderProjects\\MonoGameLibrary\\MonoGameLibrary.csproj",
-        "packagesPath": "C:\\Users\\indep\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\indep\\RiderProjects\\MonoGameLibrary\\obj\\",
+        "projectPath": "/Users/fire/RiderProjects/MonoGameLibrary/MonoGameLibrary.csproj",
+        "packagesPath": "/Users/fire/.nuget/packages/",
+        "outputPath": "/Users/fire/RiderProjects/MonoGameLibrary/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\indep\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/fire/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -48,6 +49,14 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
+            "Arch": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "Arch.System": {
+              "target": "Package",
+              "version": "[1.1.0, )"
+            },
             "MonoGame.Framework.DesktopGL": {
               "suppressParent": "All",
               "target": "Package",
@@ -68,15 +77,11 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.17, 8.0.17]"
+              "version": "[8.0.16, 8.0.16]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.17, 8.0.17]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.17, 8.0.17]"
+              "version": "[8.0.16, 8.0.16]"
             }
           ],
           "frameworkReferences": {
@@ -84,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\indep\\.dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
