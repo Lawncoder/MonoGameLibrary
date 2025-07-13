@@ -1,0 +1,13 @@
+/Users/fire/RiderProjects/MonoGameLibrary/bin/Release/net8.0/MonoGameLibrary.deps.json
+/Users/fire/RiderProjects/MonoGameLibrary/bin/Release/net8.0/MonoGameLibrary.dll
+/Users/fire/RiderProjects/MonoGameLibrary/bin/Release/net8.0/MonoGameLibrary.pdb
+/Users/fire/RiderProjects/MonoGameLibrary/obj/Release/net8.0/MonoGameLibrary.csproj.AssemblyReference.cache
+/Users/fire/RiderProjects/MonoGameLibrary/obj/Release/net8.0/MonoGameLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/fire/RiderProjects/MonoGameLibrary/obj/Release/net8.0/MonoGameLibrary.AssemblyInfoInputs.cache
+/Users/fire/RiderProjects/MonoGameLibrary/obj/Release/net8.0/MonoGameLibrary.AssemblyInfo.cs
+/Users/fire/RiderProjects/MonoGameLibrary/obj/Release/net8.0/MonoGameLibrary.csproj.CoreCompileInputs.cache
+/Users/fire/RiderProjects/MonoGameLibrary/obj/Release/net8.0/MonoGameLibrary.sourcelink.json
+/Users/fire/RiderProjects/MonoGameLibrary/obj/Release/net8.0/MonoGameLibrary.dll
+/Users/fire/RiderProjects/MonoGameLibrary/obj/Release/net8.0/refint/MonoGameLibrary.dll
+/Users/fire/RiderProjects/MonoGameLibrary/obj/Release/net8.0/MonoGameLibrary.pdb
+/Users/fire/RiderProjects/MonoGameLibrary/obj/Release/net8.0/ref/MonoGameLibrary.dll
