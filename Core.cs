@@ -13,6 +13,7 @@ using MonoGameLibrary.Audio;
 using MonoGameLibrary.ECS;
 using MonoGameLibrary.Input;
 using MonoGameLibrary.Scenes;
+using nkast.Aether.Physics2D.Dynamics.Contacts;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace MonoGameLibrary;
@@ -74,9 +75,66 @@ public class Core : Game
         CommandBuffer = new CommandBuffer();
         EntityWorld = Arch.Core.World.Create();
         PhysicsWorld = new World();
+        PhysicsWorld.ContactManager.BeginContact += AddCollisionsToEntity;
         Systems = new List<SystemBase>();
     }
-
+    public bool AddCollisionsToEntity(Contact contact)
+    {
+           
+       
+        
+      
+        {
+            var query = new QueryDescription().WithAll<PhysicsComponent>();
+            Entity entityA = Entity.Null;
+            Entity entityB = Entity.Null;
+            EntityWorld.Query(in query, (Entity entity, ref PhysicsComponent physics) =>
+            {
+                if (physics.Fixture == contact.FixtureA)
+                {
+                    
+                    entityA = entity;
+                    
+                }
+                if (physics.Fixture ==  contact.FixtureB)
+                {
+                    entityB = entity;
+                }
+            });
+            
+            var hitComponent = new HitComponent();
+            var normal = nkast.Aether.Physics2D.Common.Vector2.One;
+            contact.GetWorldManifold(out normal, out hitComponent.Points);
+            hitComponent.CollisionLayer = contact.FixtureB.CollisionCategories;
+            hitComponent.CollisionNormal = normal;
+            hitComponent.Position = contact.FixtureB.Body.Position;
+            hitComponent.Fixture = contact.FixtureB;
+            hitComponent.Body = contact.FixtureB.Body;
+            hitComponent.Entity = entityB;
+                    
+                    
+                    
+            CommandBuffer.Add(entityA, hitComponent);
+            
+            hitComponent = new HitComponent();
+            var normal2 = nkast.Aether.Physics2D.Common.Vector2.One;
+            contact.GetWorldManifold(out normal2, out hitComponent.Points);
+            hitComponent.CollisionLayer = contact.FixtureA.CollisionCategories;
+            hitComponent.CollisionNormal = normal2;
+            hitComponent.Position = contact.FixtureA.Body.Position;
+            hitComponent.Fixture = contact.FixtureA;
+            hitComponent.Body = contact.FixtureA.Body;
+            hitComponent.Entity = entityA;
+                    
+                    
+                    
+            CommandBuffer.Add(entityB, hitComponent);
+        }
+        
+        
+        
+        return true;
+    }
    
 
     protected override void Initialize()
@@ -208,6 +266,9 @@ public class Core : Game
 
         // Change the currently active scene to the new scene.
         s_activeScene = s_nextScene;
+        
+        //Add active systems to our systems
+        Systems = s_activeScene.Systems;
 
         // Null out the next scene value so it does not trigger a change over and over.
         s_nextScene = null;

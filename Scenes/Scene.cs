@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mario;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using MonoGameLibrary.ECS;
 
 namespace MonoGameLibrary.Scenes;
 
 public abstract class Scene : IDisposable
 {
     public bool IsDisposed { get; private set; }
+
+    public List<SystemBase> Systems;
     /// <summary>
     /// Gets the ContentManager used for loading scene-specific assets.
     /// </summary>
@@ -21,6 +25,7 @@ public abstract class Scene : IDisposable
     /// </summary>
     public Scene()
     {
+        Systems = new();
         // Create a content manager for the scene
         Content = new ContentManager(Core.Content.ServiceProvider);
 
